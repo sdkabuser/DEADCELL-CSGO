@@ -1,18 +1,18 @@
 #pragma once
 
-class Address {
+class address_t {
 protected:
 	uintptr_t m_ptr;
 
 public:
 	// default c/dtor
-	__forceinline Address( ) : m_ptr{} { };
-	__forceinline ~Address( ) = default;
+	__forceinline address_t( ) : m_ptr{} { };
+	__forceinline ~address_t( ) = default;
 
-	__forceinline Address( uintptr_t a ) :
+	__forceinline address_t( uintptr_t a ) :
 		m_ptr{ a } { }
 
-	__forceinline Address( const void *a ) :
+	__forceinline address_t( const void *a ) :
 		m_ptr{ reinterpret_cast< uintptr_t >( a ) } { }
 
 	__forceinline operator uintptr_t( ) const {
@@ -28,42 +28,42 @@ public:
 	}
 
 	// to is like as but dereferences.
-	template< typename T = Address >
+	template< typename T = address_t >
 	__forceinline T to( ) const {
 		return *reinterpret_cast< T* >( m_ptr );
 	}
 
-	template< typename T = Address >
+	template< typename T = address_t >
 	__forceinline T as( ) const {
 		return reinterpret_cast< T >( m_ptr );
 	}
 
-	template< typename T = Address >
+	template< typename T = address_t >
 	__forceinline T at( ptrdiff_t offset ) const {
 		return *reinterpret_cast< T* >( m_ptr + offset );
 	}
 
-	template< typename T = Address >
+	template< typename T = address_t >
 	__forceinline T add( ptrdiff_t offset ) const {
 		return reinterpret_cast< T >( m_ptr + offset );
 	}
 
-	template< typename T = Address >
+	template< typename T = address_t >
 	__forceinline T sub( ptrdiff_t offset ) const {
 		return reinterpret_cast< T >( m_ptr - offset );
 	}
 
-	template< typename T = Address >
+	template< typename T = address_t >
 	__forceinline T get( size_t dereferences = 1 ) {
 		return reinterpret_cast< T >( get_( dereferences ) );
 	}
 
-	template< typename T = Address >
+	template< typename T = address_t >
 	__forceinline void set( T val ) {
 		*reinterpret_cast< T* >( m_ptr ) = val;
 	}
 
-	template< typename T = Address >
+	template< typename T = address_t >
 	__forceinline T rel( size_t offset = 0 ) {
 
 		uintptr_t out = m_ptr + offset;
@@ -77,7 +77,7 @@ public:
 		return reinterpret_cast< T >( out );
 	}
 
-	__forceinline static bool safe( Address to_check ) {
+	__forceinline static bool safe( address_t to_check ) {
 		static MEMORY_BASIC_INFORMATION32 mbi{};
 
 		if( !to_check
